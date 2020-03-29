@@ -14,34 +14,60 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    db.collection("users").insertOne(
-      {
-        name: "Renato",
-        age: 37
-      },
-      (error, result) => {
-        if (error) {
-          return console.log("Unable to insert user");
-        }
+    // db.collection("users").insertOne(
+    //   {
+    //     name: "Renato",
+    //     age: 37
+    //   },
+    //   (error, result) => {
+    //     if (error) {
+    //       return console.log("Unable to insert user");
+    //     }
 
-        console.log(result.ops);
-      }
-    );
+    //     console.log(result.ops);
+    //   }
+    // );
 
-    db.collection("users").insertMany(
+    // db.collection("users").insertMany(
+    //   [
+    //     {
+    //       name: "Jen",
+    //       age: 28
+    //     },
+    //     {
+    //       name: "Gunther",
+    //       age: 27
+    //     }
+    //   ],
+    //   (error, result) => {
+    //     if (error) {
+    //       return console.log("Unable to insert documents");
+    //     }
+
+    //     console.log(result.ops);
+    //   }
+    // );
+
+    db.collection("tasks").insertMany(
       [
         {
-          name: "Jen",
-          age: 28
+          description: "Wash the dishes",
+          completed: true
         },
         {
-          name: "Gunther",
-          age: 27
+          description: "Mow the lawn",
+          completed: false
+        },
+        {
+          description: "Scratch the itch",
+          completed: false
         }
       ],
       (error, result) => {
         if (error) {
-          return console.log("Unable to insert documents");
+          return console.log(
+            "Unable to insert documents on collection 'tasks'"
+          );
         }
 
         console.log(result.ops);
