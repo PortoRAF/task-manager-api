@@ -113,3 +113,7 @@ dist
 
 # Playground files
 playground/
+
+# Linters config
+.eslintrc.json
+.prettierrc
