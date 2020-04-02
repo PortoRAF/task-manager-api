@@ -117,3 +117,6 @@ playground/
 # Linters config
 .eslintrc.json
 .prettierrc
+
+# Environment variables
+config/
