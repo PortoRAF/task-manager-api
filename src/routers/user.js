@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const sharp = require('sharp');
 const auth = require('../middleware/auth');
 const User = require('../models/user');
 const router = new express.Router();
@@ -85,6 +87,64 @@ router.delete('/users/me', auth, async (req, res) => {
     res.send(req.user);
   } catch (error) {
     res.status(400).send(error);
+  }
+});
+
+// Middleware to upload images
+const upload = multer({
+  limits: {
+    fileSize: 1000000
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error('Invalid file format'));
+    }
+    cb(undefined, true);
+  }
+});
+
+// Upload a profile picture
+router.post(
+  '/users/me/avatar',
+  auth,
+  upload.single('avatar'),
+  async (req, res) => {
+    const buffer = await sharp(req.file.buffer)
+      .resize({ width: 250, height: 250 })
+      .png()
+      .toBuffer();
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.send();
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
+// Delete profile picture
+router.delete('/users/me/avatar', auth, async (req, res) => {
+  try {
+    req.user.avatar = undefined;
+    await req.user.save();
+    res.send();
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get('/users/me/avatar', auth, async (req, res) => {
+  try {
+    //const user = await User.findById(req.params.id);
+    if (!req.user.avatar) {
+      //if (!user || !user.avatar) {
+      throw new Error();
+    }
+
+    res.set('Content-Type', 'image/png');
+    res.send(req.user.avatar);
+  } catch (error) {
+    res.status(404).send();
   }
 });
 
