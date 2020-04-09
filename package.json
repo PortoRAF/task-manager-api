@@ -9,7 +9,10 @@
     "test": "env-cmd -f ./src/config/test.env jest --watch"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules"
+    ]
   },
   "keywords": [],
   "author": "",
